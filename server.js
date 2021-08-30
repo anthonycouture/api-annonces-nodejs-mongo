@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const start = async () => {
-    const {connect} = require('./src/common/db');
-    await connect();
+const connectDb = async () => {
+    await require('./src/common/db').connect();
+}
 
-
+connectDb().then(() => {
     const http = require('http');
     const app = require('./src/app');
 
@@ -26,9 +26,7 @@ const start = async () => {
     if (process.env.PRODUCTION !== `true`) {
         console.log(`Serveur démarré sur l'url http://localhost:${PORT}`);
     }
-}
-
-start();
+});
 
 
 
