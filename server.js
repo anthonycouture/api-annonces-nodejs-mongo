@@ -1,8 +1,8 @@
 require('dotenv').config();
 
 const start = async () => {
-    const {db} = require('./src/common');
-    await db.connect();
+    const {connect} = require('./src/common/db');
+    await connect();
 
 
     const http = require('http');

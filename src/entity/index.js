@@ -1,1 +1,0 @@
-module.exports.annonce =  require('./annonce');

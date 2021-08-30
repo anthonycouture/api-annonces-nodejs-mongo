@@ -10,4 +10,4 @@ class Annonce {
 
 }
 
-module.exports = Annonce;
+module.exports.Annonce = Annonce;

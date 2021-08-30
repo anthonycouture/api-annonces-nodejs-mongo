@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Annonce = require("../entity/annonce");
+const {Annonce} = require('../entity/annonce');
 const {ObjectId} = require("mongodb");
 
-const common = require('../common');
-const db = common.db.getDb();
-const {annonceCollection} = common.constantes;
+const db = require('../common/db').getDb();
+const {annonceCollection} = require('../common/constantes');
 
 
 router.get('/', async (req, res) => {
