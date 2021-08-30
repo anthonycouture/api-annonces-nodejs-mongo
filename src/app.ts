@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import route from './controllers';
 import {Database} from "./common/db";
 import http from "http";
+
 config();
 const app = express();
 app.use(bodyParser.json());
@@ -29,5 +30,3 @@ if (process.env.PRODUCTION !== `true`) {
 }
 
 app.use(route);
-
-export default app;

@@ -1,21 +1,21 @@
 import express from "express";
 import {Annonce} from "../entity/annonce";
-import {Db, ObjectId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {annonceCollection} from "../common/constantes";
 import {Database} from "../common/db";
 
 const router = express.Router();
 
+const db = () => Database.getInstance().db;
+
 router.get('/', async (req, res) => {
-    const db : Db = Database.getInstance().db;
-    res.send(await db.collection(annonceCollection).find().toArray());
+    res.send(await db().collection(annonceCollection).find().toArray());
 });
 
 router.post('/',async (req, res) => {
-    const db : Db = Database.getInstance().db;
-    if (!!req.body.title && typeof req.body.title === 'string') {
+    if (!!req.body.title) {
         const annonce = new Annonce(req.body.title);
-        const insert = await db.collection(annonceCollection).insertOne(annonce);
+        const insert = await db().collection(annonceCollection).insertOne(annonce);
         annonce._id = insert.insertedId;
         res.status(200).json(annonce);
     }
@@ -23,8 +23,7 @@ router.post('/',async (req, res) => {
 });
 
 router.delete('/:idAnnonce', async (req, res) => {
-    const db : Db = Database.getInstance().db;
-    await db.collection(annonceCollection).deleteOne({
+    await db().collection(annonceCollection).deleteOne({
         _id: new ObjectId(req.params.idAnnonce)
     });
     res.status(200).send();
