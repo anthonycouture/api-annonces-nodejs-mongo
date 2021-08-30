@@ -1,17 +1,18 @@
-const express = require('express');
+import express from "express";
+import {Annonce} from "../entity/annonce";
+import {Db, ObjectId} from "mongodb";
+import {annonceCollection} from "../common/constantes";
+import {Database} from "../common/db";
+
 const router = express.Router();
-const {Annonce} = require('../entity/annonce');
-const {ObjectId} = require("mongodb");
-
-const db = require('../common/db').getDb();
-const {annonceCollection} = require('../common/constantes');
-
 
 router.get('/', async (req, res) => {
+    const db : Db = Database.getInstance().db;
     res.send(await db.collection(annonceCollection).find().toArray());
 });
 
 router.post('/',async (req, res) => {
+    const db : Db = Database.getInstance().db;
     if (!!req.body.title && typeof req.body.title === 'string') {
         const annonce = new Annonce(req.body.title);
         const insert = await db.collection(annonceCollection).insertOne(annonce);
@@ -22,10 +23,11 @@ router.post('/',async (req, res) => {
 });
 
 router.delete('/:idAnnonce', async (req, res) => {
+    const db : Db = Database.getInstance().db;
     await db.collection(annonceCollection).deleteOne({
-        _id: ObjectId(req.params.idAnnonce)
+        _id: new ObjectId(req.params.idAnnonce)
     });
     res.status(200).send();
 })
 
-module.exports = router;
+export default router;
