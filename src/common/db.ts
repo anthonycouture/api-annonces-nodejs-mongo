@@ -24,22 +24,28 @@ export class Database {
     }
 
     connexionDb = async () : Promise<void> => {
+        try {
 
-        const user = process.env.DB_USER;
-        const pwd = process.env.DB_PWD;
-        const db = process.env.DB_DB;
-        const url = process.env.DB_URL;
-        const port = process.env.DB_PORT;
-        if (!user || !pwd || !db || !url || !port) {
-            console.error(`Erreur dans le fichier .env`);
-            process.exit(1)
+            const user = process.env.DB_USER;
+            const pwd = process.env.DB_PWD;
+            const db = process.env.DB_DB;
+            const url = process.env.DB_URL;
+            const port = process.env.DB_PORT;
+            if (!user || !pwd || !db || !url || !port) {
+                console.error(`Erreur dans le fichier .env`);
+                process.exit(1)
+            }
+
+            const client = new MongoClient(`mongodb://${user}:${pwd}@${url}:${port}/${db}`);
+
+            await client.connect();
+            this._db = client.db();
+            console.log('Connexion à MongoDb réussi !!!');
+        }catch (error) {
+            console.error(error);
+            console.error('Connexion à MongoDb échoué !!!');
+            process.exit(1);
         }
-
-        const client = new MongoClient(`mongodb://${user}:${pwd}@${url}:${port}/${db}`);
-
-        await client.connect();
-        this._db = client.db();
-        console.log('Connexion à MongoDb réussi !!!');
 
     }
 }
