@@ -19,14 +19,12 @@ if (!PORT || !PRODUCTION) {
 }
 
 app.set('port', PORT);
+app.use(route);
 
 const server = http.createServer(app);
-
-
 server.listen(PORT);
 
 if (process.env.PRODUCTION !== `true`) {
     console.log(`Serveur démarré sur l'url http://localhost:${PORT}`);
 }
 
-app.use(route);
