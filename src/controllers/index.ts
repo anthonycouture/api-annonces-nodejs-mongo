@@ -17,10 +17,10 @@ router.use((req, res, next) => {
                     algorithms: [jwtAlgorithm]
                 }) as PayloadJWT;
             } catch (error) {
-                res.status(401).json(error);
+                return res.status(401).json(error);
             }
         else
-            res.status(401).send();
+            return res.status(401).send();
     }
     next();
 });

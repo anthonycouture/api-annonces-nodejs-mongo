@@ -18,7 +18,7 @@ router.post('/login', async (req, res) => {
         password: req.body.password
     }).toArray() as User[];
     if (usersTab.length === 0)
-        res.status(404).send();
+        return res.status(404).send();
     else {
         const user: User = usersTab[0];
 
@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
             algorithm: jwtAlgorithm,
             expiresIn: jwtExpiresIn
         });
-        res.json({
+        return res.json({
             token: token
         });
     }
@@ -39,7 +39,7 @@ router.post('/register', async (req, res) => {
             email: req.body.email
         }).toArray() as User[];
         if (usersTab.length !== 0)
-            res.status(500).send();
+            return res.status(500).send();
         else {
             const insertData = {email: req.body.email, password: req.body.password};
             const insert: InsertOneResult = await db().collection(usersCollection).insertOne(insertData);
@@ -50,12 +50,12 @@ router.post('/register', async (req, res) => {
                 algorithm: jwtAlgorithm,
                 expiresIn: jwtExpiresIn
             });
-            res.json({
+            return res.json({
                 token: token
             });
         }
     } else {
-        res.status(500).send();
+        return res.status(500).send();
     }
 });
 

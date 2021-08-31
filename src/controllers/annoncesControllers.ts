@@ -11,7 +11,7 @@ const db = () => Database.getInstance().db;
 
 router.get('/', async (req, res) => {
     const payload: PayloadJWT = req.cookies;
-    res.send(await db().collection(annoncesCollection).find({"meta.idUser": payload.id}).toArray() as Annonce[]);
+    return res.send(await db().collection(annoncesCollection).find({"meta.idUser": payload.id}).toArray() as Annonce[]);
 });
 
 router.post('/',async (req, res) => {
@@ -20,9 +20,9 @@ router.post('/',async (req, res) => {
         const annonce = new Annonce(req.body.title, {email: payload.email, idUser: payload.id});
         const insert: InsertOneResult = await db().collection(annoncesCollection).insertOne(annonce);
         annonce._id = insert.insertedId;
-        res.status(200).json(annonce);
+        return res.status(200).json(annonce);
     } else {
-        res.status(500).send();
+        return res.status(500).send();
     }
 });
 
@@ -33,9 +33,9 @@ router.delete('/:idAnnonce', async (req, res) => {
         "meta.idUser": payload.id
     });
     if (result.deletedCount === 0)
-        res.status(404).send();
+        return res.status(404).send();
     else
-        res.status(200).send();
+        return res.status(200).send();
 });
 
 export default router;
