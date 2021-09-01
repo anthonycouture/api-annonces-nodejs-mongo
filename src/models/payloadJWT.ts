@@ -2,18 +2,15 @@ import {ObjectId} from "mongodb";
 
 export class PayloadJWT {
     public id: ObjectId;
-    public email: string;
 
 
-    constructor(id: ObjectId, email: string) {
+    constructor(id: ObjectId) {
         this.id = id;
-        this.email = email;
     }
 
-    toPayload(): { id: ObjectId; email: string } {
+    toPayload(): { id: ObjectId } {
         return {
-            id: this.id,
-            email: this.email
+            id: this.id
         }
     }
 }

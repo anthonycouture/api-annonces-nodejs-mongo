@@ -7,6 +7,7 @@ import {getPrivateKey} from "../common/utils";
 import {PayloadJWT} from "../models/payloadJWT";
 
 const router = express.Router();
+
 router.use((req, res, next) => {
     if (req.path.startsWith('/annonces')) {
         const privateKey = getPrivateKey()
