@@ -7,6 +7,9 @@ import {PayloadJWT} from "../models/payloadJWT";
 import jwt from "jsonwebtoken";
 import {Roles} from "../common/roles";
 import {InsertOneResult, ObjectId} from "mongodb";
+import {UserNotFoundError} from "../errors/userNotFoundError";
+import {ProblemDbError} from "../errors/problemDbError";
+import {UserExistError} from "../errors/userExistError";
 
 const db = () => Database.getInstance().db;
 
@@ -35,15 +38,15 @@ export const authUser = async (email: string, password: string): Promise<string>
         .toArray() as User[];
 
     if (usersTab.length === 0)
-        throw new Error("utilisateur non trouvé");
+        throw new UserNotFoundError();
 
     const user: User = usersTab[0];
 
-    if(!!user._id) {
-        const payload = new PayloadJWT(user._id);
-        return jwtById(payload);
+    if (!user._id) {
+        throw new ProblemDbError('id users null bdd');
     }
-    throw new Error("id null en BDD")
+    const payload = new PayloadJWT(user._id);
+    return jwtById(payload);
 };
 
 export const registerUser = async (email: string, password: string, role: 'admin' | 'user'): Promise<string> => {
@@ -55,7 +58,7 @@ export const registerUser = async (email: string, password: string, role: 'admin
         })
         .toArray() as User[];
     if (usersTab.length !== 0)
-        throw new Error("utilisateur déjà présent");
+        throw new UserExistError();
     const insertData = {email, password, roles};
     const user = new User(insertData.email, insertData.password, insertData.roles);
     const insert: InsertOneResult = await db()

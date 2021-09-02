@@ -2,6 +2,7 @@ import {Database} from "../common/db";
 import {Annonce} from "../entity/annonce";
 import {ANNONCES_COLLECTION} from "../common/constantes";
 import {DeleteResult, InsertOneResult, ObjectId, UpdateResult} from "mongodb";
+import {AnnonceNotFoundError} from "../errors/annonceNotFoundError";
 
 const db = () => Database.getInstance().db;
 
@@ -37,7 +38,7 @@ export const updateAnnonce = async (idAnnonce: ObjectId, title: string, descript
             }
         );
     if (result.matchedCount === 0)
-        throw new Error("Pas d'annonce à mettre à jour");
+        throw new AnnonceNotFoundError();
 };
 
 export const deleteAnnonce = async (idAnnonce: ObjectId, idUser: ObjectId) => {
@@ -48,5 +49,5 @@ export const deleteAnnonce = async (idAnnonce: ObjectId, idUser: ObjectId) => {
             "meta.idUser": idUser
         });
     if (result.deletedCount === 0)
-        throw new Error("Pas d'annonce à supprimer");
+        throw new AnnonceNotFoundError();
 };
