@@ -2,14 +2,14 @@ import {ObjectId} from "mongodb";
 import {Roles} from "../common/roles";
 
 export class User {
-    _id: ObjectId;
+    _id: ObjectId | undefined;
     email: string;
     password: string;
     roles: Roles[];
 
 
-    constructor(id: ObjectId, email: string, password: string, roles: Roles[]) {
-        this._id = id;
+    constructor(email: string, password: string, roles: Roles[], _id: ObjectId | undefined = undefined) {
+        this._id = _id;
         this.email = email;
         this.password = password;
         this.roles = roles;

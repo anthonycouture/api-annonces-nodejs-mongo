@@ -36,17 +36,17 @@ export const updateAnnonce = async (idAnnonce: ObjectId, title: string, descript
                 }
             }
         );
-    if(result.matchedCount === 0)
+    if (result.matchedCount === 0)
         throw new Error("Pas d'annonce à mettre à jour");
 };
 
-export const deleteAnnonce =async (idAnnonce: ObjectId, idUser: ObjectId) => {
+export const deleteAnnonce = async (idAnnonce: ObjectId, idUser: ObjectId) => {
     const result: DeleteResult = await db()
         .collection(ANNONCES_COLLECTION)
         .deleteOne({
-        _id: idAnnonce,
-        "meta.idUser": idUser
-    });
+            _id: idAnnonce,
+            "meta.idUser": idUser
+        });
     if (result.deletedCount === 0)
         throw new Error("Pas d'annonce à supprimer");
 };

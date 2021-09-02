@@ -6,7 +6,7 @@ import {Database} from "../common/db";
 import {PayloadJWT} from "../models/payloadJWT";
 import jwt from "jsonwebtoken";
 import {Roles} from "../common/roles";
-import {InsertOneResult} from "mongodb";
+import {InsertOneResult, ObjectId} from "mongodb";
 
 const db = () => Database.getInstance().db;
 
@@ -21,7 +21,8 @@ const jwtById = (payload: PayloadJWT): string => {
             {
                 algorithm: JWT_ALGORITHM,
                 expiresIn: JWT_EXPIRES_IN
-            });
+            }
+        );
 }
 
 export const authUser = async (email: string, password: string): Promise<string> => {
@@ -38,8 +39,11 @@ export const authUser = async (email: string, password: string): Promise<string>
 
     const user: User = usersTab[0];
 
-    const payload = new PayloadJWT(user._id);
-    return jwtById(payload);
+    if(!!user._id) {
+        const payload = new PayloadJWT(user._id);
+        return jwtById(payload);
+    }
+    throw new Error("id null en BDD")
 };
 
 export const registerUser = async (email: string, password: string, role: 'admin' | 'user'): Promise<string> => {
@@ -53,15 +57,16 @@ export const registerUser = async (email: string, password: string, role: 'admin
     if (usersTab.length !== 0)
         throw new Error("utilisateur déjà présent");
     const insertData = {email, password, roles};
+    const user = new User(insertData.email, insertData.password, insertData.roles);
     const insert: InsertOneResult = await db()
         .collection(USERS_COLLECTION)
         .insertOne(insertData);
-    const user = new User(insert.insertedId, insertData.email, insertData.password, insertData.roles);
+    user._id = new ObjectId(insert.insertedId);
     const payload = new PayloadJWT(user._id);
     return jwtById(payload);
 };
 
-export const verifyJwt = (tokenJwt: string) : PayloadJWT => {
+export const verifyJwt = (tokenJwt: string): PayloadJWT => {
     return jwt.verify(tokenJwt, getPrivateKey(), {
         algorithms: [JWT_ALGORITHM]
     }) as PayloadJWT;

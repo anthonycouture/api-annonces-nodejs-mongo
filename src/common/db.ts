@@ -42,7 +42,6 @@ export class Database {
             this._db = client.db();
             console.log('Connexion à MongoDb réussi !!!');
         }catch (error) {
-            console.error(error);
             console.error('Connexion à MongoDb échoué !!!');
             process.exit(1);
         }
