@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import {JWT_ALGORITHM, JWT_EXPIRES_IN, USERS_COLLECTION} from "../common/constantes";
 import {User} from "../entity/user";
-import {Database} from "../common/db";
+import {Database} from "../common/database";
 import {PayloadJWT} from "../models/payloadJWT";
 import jwt from "jsonwebtoken";
 import {Roles} from "../common/roles";

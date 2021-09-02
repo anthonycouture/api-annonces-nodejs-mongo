@@ -2,11 +2,11 @@
   "name": "api-annonces",
   "version": "0.0.1",
   "description": "api annonces",
-  "main": "./src/app.ts",
+  "main": "src/server.ts",
   "scripts": {
     "build": "tsc",
-    "start:prod": "npm run build && node ./dist/app.js",
-    "start": "ts-node-dev ./src/app.ts"
+    "start:prod": "npm run build && node ./dist/server.js",
+    "start": "ts-node-dev src/server.ts"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

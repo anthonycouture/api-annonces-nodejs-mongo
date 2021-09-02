@@ -1,4 +1,4 @@
-import {Database} from "../common/db";
+import {Database} from "../common/database";
 import {Annonce} from "../entity/annonce";
 import {ANNONCES_COLLECTION} from "../common/constantes";
 import {DeleteResult, InsertOneResult, ObjectId, UpdateResult} from "mongodb";

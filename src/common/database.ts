@@ -8,7 +8,6 @@ export class Database {
 
 
     private constructor() {
-        this.connexionDb();
     }
 
     get db(): Db{
@@ -16,14 +15,14 @@ export class Database {
     }
 
     public static getInstance(): Database {
-        if (!Database.instance) {
-            Database.instance = new Database();
+        if (!this.instance) {
+            this.instance = new Database();
         }
 
-        return Database.instance;
+        return this.instance;
     }
 
-    connexionDb = async () : Promise<void> => {
+    connect = async () : Promise<void> => {
         try {
 
             const user = process.env.DB_USER;
@@ -33,14 +32,12 @@ export class Database {
             const port = process.env.DB_PORT;
             if (!user || !pwd || !db || !url || !port) {
                 console.error(`Erreur dans le fichier .env`);
-                process.exit(1)
+            } else {
+                const client = new MongoClient(`mongodb://${user}:${pwd}@${url}:${port}/${db}`);
+                await client.connect();
+                this._db = client.db();
+                console.log('Connexion à MongoDb réussi !!!');
             }
-
-            const client = new MongoClient(`mongodb://${user}:${pwd}@${url}:${port}/${db}`);
-
-            await client.connect();
-            this._db = client.db();
-            console.log('Connexion à MongoDb réussi !!!');
         }catch (error) {
             console.error('Connexion à MongoDb échoué !!!');
             process.exit(1);
