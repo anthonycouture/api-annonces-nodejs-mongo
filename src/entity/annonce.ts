@@ -10,11 +10,13 @@ export class Annonce {
     public description: string
     public meta: Meta;
 
-    constructor(title: string, description:string, meta: Meta, _id = undefined) {
+    constructor(title: string, description:string, idUser: ObjectId, _id = undefined) {
         this.title = title;
         this.description = description;
         this._id = _id;
-        this.meta = meta;
+        this.meta = {
+            idUser
+        };
     }
 
 

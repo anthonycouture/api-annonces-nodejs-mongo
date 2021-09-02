@@ -1,6 +1,8 @@
-export const annoncesCollection = 'annonces';
-export const usersCollection = 'users';
+import {Algorithm} from "jsonwebtoken";
+
+export const ANNONCES_COLLECTION: string = 'annonces';
+export const USERS_COLLECTION: string = 'users';
 
 
-export const jwtAlgorithm = "HS256";
-export const jwtExpiresIn = "1h";
+export const JWT_ALGORITHM: Algorithm = "HS256";
+export const JWT_EXPIRES_IN: string = "1h";
