@@ -49,6 +49,7 @@ export const authUser = async (email: string, password: string): Promise<string>
     return jwtById(payload);
 };
 
+
 export const registerUser = async (email: string, password: string, role: 'admin' | 'user'): Promise<string> => {
     const roles = role === "user" ? [Roles.user] : [Roles.user, Roles.admin];
     const usersTab = await db()

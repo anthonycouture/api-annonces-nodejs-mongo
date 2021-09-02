@@ -1,4 +1,4 @@
-import express, {Request, Response} from "express";
+import express, {NextFunction, Request, Response} from "express";
 import {AnnoncesController} from "../controllers/annoncesController";
 import {UsersController} from "../controllers/usersController";
 import {AuthentificationMiddleware} from "../middlewares/authentificationMiddleware";
@@ -17,7 +17,10 @@ export class Routes {
     }
 
     public routes(app: express.Application) {
-        /** Route annonces */
+
+        /**
+         * Route annonces
+         */
         app.get('/annonces',
             this._annoncesController.getAnnonces);
         app.post('/annonces',
@@ -30,18 +33,33 @@ export class Routes {
             this._authentificationMiddleware.authentification,
             this._annoncesController.deleteAnnonce);
 
-        /** Route users */
+        /**
+         * Route users
+         */
         app.post('/login',
             this._usersController.login);
         app.post('/register',
             this._usersController.register);
 
         /**
+         * Récupère les erreurs envoyer dans la fonction next
+         */
+        app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+            console.error("Error Handling Middleware called");
+            console.error('Path: ', req.path);
+            console.error('Error: ', error);
+            res.status(500).send();
+        });
+
+
+        /**
          * 404 NOT FOUND
          * error si pas de routes toujours laisser en dernier
          */
-        app.use('*', (req: Request, res: Response) => {
+        app.use((req: Request, res: Response) => {
             return res.status(404).send();
-        })
+        });
+
+
     }
 }
