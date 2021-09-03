@@ -36,7 +36,7 @@ export class UsersService {
         if (!user._id) {
             throw new ProblemDbError('id users null bdd');
         }
-        const payload = new PayloadJWT(user._id);
+        const payload = new PayloadJWT(user._id, user.roles);
         return this._jwtById(payload);
     };
 
@@ -57,7 +57,7 @@ export class UsersService {
             .collection(USERS_COLLECTION)
             .insertOne(insertData);
         user._id = new ObjectId(insert.insertedId);
-        const payload = new PayloadJWT(user._id);
+        const payload = new PayloadJWT(user._id, user.roles);
         return this._jwtById(payload);
     };
 

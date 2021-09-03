@@ -5,6 +5,8 @@ import {AnnonceNotFoundError} from "../errors/annonceNotFoundError";
 import {AnnoncesService} from "../services/annoncesService";
 import {AnnonceMapper} from "../mapper/annonceMapper";
 import {Annonce} from "../entity/annonce";
+import {Roles} from "../common/roles";
+import {UnauthorizedError} from "../errors/unauthorizedError";
 
 
 const annoncesService = new AnnoncesService();
@@ -40,11 +42,16 @@ export class AnnoncesController {
             description
         } = req.body;
         if (!!title && typeof title === 'string' && !!description && typeof description === 'string') {
-            await annoncesService.updateAnnonce(new ObjectId(req.params.idAnnonce), title, description, payload.id)
+            await annoncesService.updateAnnonce(new ObjectId(req.params.idAnnonce), title, description, payload.id, payload.roles.includes(Roles.admin))
                 .catch((error) => {
-                    if (error instanceof AnnonceNotFoundError)
-                        return res.status(404).send();
-                    return next(error);
+                    switch (error) {
+                        case error instanceof AnnonceNotFoundError:
+                            return res.status(404).send();
+                        case error instanceof UnauthorizedError:
+                            return res.status(401).send();
+                        default:
+                            return next(error);
+                    }
                 });
             return res.send();
         }
@@ -53,11 +60,16 @@ export class AnnoncesController {
 
     async deleteAnnonce(req: Request, res: Response, next: NextFunction) {
         const payload: PayloadJWT = req.cookies;
-        await annoncesService.deleteAnnonce(new ObjectId(req.params.idAnnonce), payload.id)
+        await annoncesService.deleteAnnonce(new ObjectId(req.params.idAnnonce), payload.id, payload.roles.includes(Roles.admin))
             .catch((error) => {
-                if (error instanceof AnnonceNotFoundError)
-                    return res.status(404).send();
-                return next(error);
+                switch (error) {
+                    case error instanceof AnnonceNotFoundError:
+                        return res.status(404).send();
+                    case error instanceof UnauthorizedError:
+                        return res.status(401).send();
+                    default:
+                        return next(error);
+                }
             });
         return res.status(200).send();
     }
