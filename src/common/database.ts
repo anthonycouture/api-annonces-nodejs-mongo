@@ -14,7 +14,7 @@ export class Database {
         return this._db;
     }
 
-    public static getInstance(): Database {
+    static getInstance(): Database {
         if (!this.instance) {
             this.instance = new Database();
         }
