@@ -1,6 +1,5 @@
-export class UserNotFoundError extends Error{
-
-    constructor(message: string = 'Utilisateur non trouvé') {
-        super(message);
-    }
+export class UserNotFoundError extends Error {
+  constructor (message = "Utilisateur non trouvé") {
+    super(message);
+  }
 }

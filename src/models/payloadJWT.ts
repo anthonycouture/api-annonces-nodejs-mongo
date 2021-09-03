@@ -1,20 +1,19 @@
-import {ObjectId} from "mongodb";
-import {Roles} from "../common/roles";
+import { ObjectId } from "mongodb";
+import { Roles } from "../common/roles";
 
 export class PayloadJWT {
-    public id: ObjectId;
-    public roles: Roles[]
+  public id: ObjectId;
+  public roles: Roles[];
 
+  constructor (id: ObjectId, roles: Roles[]) {
+    this.id = id;
+    this.roles = roles;
+  }
 
-    constructor(id: ObjectId, roles: Roles[]) {
-        this.id = id;
-        this.roles = roles;
-    }
-
-    toPayload(): { id: ObjectId, roles: Roles[] } {
-        return {
-            id: this.id,
-            roles: this.roles
-        }
-    }
+  toPayload (): { id: ObjectId, roles: Roles[] } {
+    return {
+      id: this.id,
+      roles: this.roles
+    };
+  }
 }

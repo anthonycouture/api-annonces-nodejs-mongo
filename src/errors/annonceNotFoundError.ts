@@ -1,6 +1,5 @@
 export class AnnonceNotFoundError extends Error {
-
-    constructor(message: string = 'Annonce non trouvé') {
-        super(message);
-    }
+  constructor (message = "Annonce non trouvé") {
+    super(message);
+  }
 }
